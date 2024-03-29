@@ -1,63 +1,56 @@
-/* galerie fonctionnelle affichée dynamiquement grâce à JavaScript + suppression du HTML */
+const galleryElement = document.querySelector(".gallery");
+const filterElement = document.querySelector(".filter");
 
-let gallery = document.querySelector(".gallery")
-let filter = document.querySelector(".filter")
+const allFilterBtn = [];
 
-fetch('http://localhost:5678/api/works')
-  .then(r => r.json())
-  .then(data => {
+async function initGallery() {
+  try {
+    const req = await fetch("http://localhost:5678/api/works");
+    const data = await req.json();
+
     // galerie fonctionnelle Javascript
-    data.forEach(objet => {
-      const figure = document.createElement("figure")
-      gallery.appendChild(figure)
+    for (const objet of data) {
+      const figure = document.createElement("figure");
+      galleryElement.appendChild(figure);
 
-      const images = document.createElement("img")
-      images.src = objet.imageUrl
-      figure.appendChild(images)
+      const image = new Image();
+      image.src = objet.imageUrl;
+      figure.appendChild(image);
 
-      const figcaption = document.createElement("figcaption")
-      figcaption.innerHTML = objet.title
-      figure.appendChild(figcaption)
-    })
+      const figcaption = document.createElement("figcaption");
+      figcaption.textContent = objet.title;
+      figure.appendChild(figcaption);
+    }
 
     // Récupérer les différentes catégories d'objets
-    const categories = data.map(objet => objet.category.name)
-    const uniqueCategories = [...new Set(categories)]
-    uniqueCategories.unshift("Tout")
-    
+    const categories = data.map((objet) => objet.category.name);
+    const uniqueCategories = [...new Set(categories)];
+    uniqueCategories.unshift("Tout");
 
-    uniqueCategories.forEach(category => {
-      const filterBtn = document.createElement("button")
-      filterBtn.innerHTML = category
-      filter.appendChild(filterBtn)
-      filterBtn.classList.add("filter-btn")
-      filterBtn.setAttribute("onclick", `filtrer('${category}')`)
-    })
+    //création de la section filtre
 
-    // Système de filtrage
-
-    window.onload = () => {
-      filtrer("Tout")
-    }
-
-    function filtrer(value) {
-      const filterBtn = document.querySelectorAll(".filter-btn")
-      filterBtn.forEach((btn) => {
-        if (btn.innerHTML.toUpperCase() === value.toUpperCase()) {
-          btn.classList.add("active-filter-btn")
-        } else {
-          btn.classList.remove("active-filter-btn")
+    for (const category of uniqueCategories) {
+      const filterBtn = document.createElement("button");
+      filterBtn.textContent = category;
+      filterBtn.classList.add("filter-btn");
+      // tout par défault
+      filterBtn.addEventListener("click", () => {
+        const allFilterBtn = document.querySelectorAll(".filter-btn");
+        for (const currentFilterBtn of allFilterBtn) {
+          if (currentFilterBtn === filterBtn) {
+            currentFilterBtn.classList.add("active-filter-btn");
+            //afficher
+          } else {
+            currentFilterBtn.classList.remove("active-filter-btn");
+            //masquer
+          }
         }
-
-        
-      })   
+      });
+      filterElement.appendChild(filterBtn);
     }
-  
-  })
+  } catch (err) {
+    console.error(err);
+  }
+}
 
-  
-
-  
-
-  
-     
+initGallery();
