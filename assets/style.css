@@ -30,6 +30,8 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color: #FFFEF8;
+	;
 }
 ol, ul {
 	list-style: none;
@@ -78,7 +80,7 @@ h1 > span {
 ;
 }
 
-h2{
+h2, .log-section h1{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
@@ -95,9 +97,16 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
+a:hover {
 	color: #B1663C;
 }
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+	color: #000;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -167,34 +176,39 @@ li:hover {
 	display: none;
 }
 
-#contact {
+/********************* contact *************************/
+
+#contact, .log-section {
 	width: 50%;
 	margin: auto;
 }
 
-#contact > * {
+#contact > *, .log-section > * {
 	text-align: center;
 
 }
 #contact h2{
 	margin-bottom: 20px;
 }
-#contact form {
+form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 3rem;
 }
 
-#contact input {
+input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+label {
 	margin: 2em 0 1em 0;
+	text-align: start;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -209,6 +223,17 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
+}
+
+.log-section p {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+footer {
+	background-color: white;
+	
 }
 
 footer nav ul {
