@@ -163,6 +163,10 @@ li:hover {
 	color: white;
 }
 
+.hidden {
+	display: none;
+}
+
 #contact {
 	width: 50%;
 	margin: auto;
