@@ -242,3 +242,50 @@ footer nav ul {
 	margin: 2em
 }
 
+/************************************ edit mode *******************************/
+
+.mode-edition-bar {
+	background-color: #000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 59px;
+	gap: 0.5rem;
+	
+}
+
+.mode-edition-bar img {
+	width: 15px;
+	height: 15px;
+}
+
+.mode-edition-bar p {
+	color: white;
+}
+
+/* titre portfolio */
+
+.mes-projets-title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	margin: 4rem 0;
+}
+
+.mes-projets-title h2 {
+	margin-bottom: 0 !important; 
+}
+
+.mes-projets-title button {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+}
+
+.mes-projets-title button img {
+	margin-right: 0.5rem;
+}
+
+
+

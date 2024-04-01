@@ -84,12 +84,52 @@ initGallery();
 function editMode() {
   // Vérifier si l'utilisateur est connecté
 const token = sessionStorage.getItem("authToken");
-console.log(token)
+const body = document.querySelector("body")
 
 if (token) {
-  // L'utilisateur est connecté, apporter les modifications spécifiques ici              
+  // L'utilisateur est connecté, version edit de la page
+  
   const loginBtn = document.querySelector(".login-btn");              
-  loginBtn.textContent = "logout";              
+  loginBtn.textContent = "logout"; 
+  
+  // mode edition bar
+  const modeEditionBar = document.createElement("div");
+  modeEditionBar.classList.add("mode-edition-bar");
+  body.prepend(modeEditionBar)
+
+  const whiteEditIcon = document.createElement("img")
+  whiteEditIcon.src = "assets/icons/pen-to-square-regular.svg"
+  whiteEditIcon.alt = "icone édition"
+  modeEditionBar.appendChild(whiteEditIcon)
+
+  const modeEditionBarText = document.createElement("p")
+  modeEditionBarText.innerHTML = "Mode édition"
+  modeEditionBar.appendChild(modeEditionBarText)
+
+  // bouton d'édition 
+
+  const portfolioSection = document.getElementById("portfolio")
+
+  const mesProjetsTitle = document.createElement("div")
+  mesProjetsTitle.classList.add("mes-projets-title")
+  portfolioSection.prepend(mesProjetsTitle)
+
+  const mesProjetsh2 = document.querySelector("#portfolio h2")
+  mesProjetsTitle.appendChild(mesProjetsh2)
+
+  const editBtn = document.createElement("button")
+  editBtn.innerHTML = "modifier"
+  mesProjetsTitle.appendChild(editBtn)
+
+  const blackEditIcon = document.createElement("img")
+  blackEditIcon.src = "assets/icons/pen-to-square-regular (1).svg"
+  blackEditIcon.alt = "icone du bouton d'édition"
+  editBtn.prepend(blackEditIcon)
+
+  //suppression section filtre
+
+  filterElement.style.display = "none"
+
   } 
 }
 
