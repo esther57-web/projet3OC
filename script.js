@@ -1,3 +1,5 @@
+/*********************************** gallery + filter ***************************************/
+
 const galleryElement = document.querySelector(".gallery");
 const filterElement = document.querySelector(".filter");
 
@@ -17,6 +19,7 @@ async function initGallery() {
 
       const image = new Image();
       image.src = objet.imageUrl;
+      image.alt = objet.title;
       figure.appendChild(image);
 
       const figcaption = document.createElement("figcaption");
@@ -75,3 +78,21 @@ async function initGallery() {
 }
 
 initGallery();
+
+/************************************ Edit mode **********************************/
+
+function editMode() {
+  // Vérifier si l'utilisateur est connecté
+const token = sessionStorage.getItem("authToken");
+console.log(token)
+
+if (token) {
+  // L'utilisateur est connecté, apporter les modifications spécifiques ici              
+  const loginBtn = document.querySelector(".login-btn");              
+  loginBtn.textContent = "logout";              
+  } 
+}
+
+editMode()
+
+
