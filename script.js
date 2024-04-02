@@ -81,6 +81,9 @@ initGallery();
 
 /************************************ Edit mode **********************************/
 
+
+
+// page d'édition
 function editMode() {
   // Vérifier si l'utilisateur est connecté
 const token = sessionStorage.getItem("authToken");
@@ -117,14 +120,20 @@ if (token) {
   const mesProjetsh2 = document.querySelector("#portfolio h2")
   mesProjetsTitle.appendChild(mesProjetsh2)
 
-  const editBtn = document.createElement("button")
-  editBtn.innerHTML = "modifier"
-  mesProjetsTitle.appendChild(editBtn)
+  const openModalBtn = document.createElement("a")
+  openModalBtn.href = "#modal"
+  openModalBtn.classList.add("js-modal")
+  mesProjetsTitle.appendChild(openModalBtn)
+  
 
   const blackEditIcon = document.createElement("img")
   blackEditIcon.src = "assets/icons/pen-to-square-regular (1).svg"
   blackEditIcon.alt = "icone du bouton d'édition"
-  editBtn.prepend(blackEditIcon)
+  openModalBtn.prepend(blackEditIcon)
+
+  const openModalBtnText = document.createElement("p")
+  openModalBtnText.innerHTML= "modifier"
+  openModalBtn.appendChild(openModalBtnText)
 
   //suppression section filtre
 
@@ -135,4 +144,41 @@ if (token) {
 
 editMode()
 
+
+// afficher la modale
+
+const openModal = function(e) {
+  e.preventDefault()
+  const modal = document.querySelector(".modal")
+  modal.style.display = "flex"
+
+  
+  //fermer la modale en cliquant sur la croix
+  modal.querySelector(".close-modal-btn").addEventListener("click", closeModal)
+  //fermer la modale en cliquant dans le vide (à suivre en dessous)
+  modal.addEventListener("click", closeModal)
+  //stopper la propagation de closeModal jusqu'à la fenêtre modale
+  modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
+  
+}
+
+const closeModal = function(e) {
+  if(modal === null) return
+  e.preventDefault()
+  
+  modal.style.display = "none"
+  //enlever les addEventListener
+  modal.removeEventListener("click", closeModal)
+  modal.querySelector(".close-modal-btn").removeEventListener("click", closeModal)
+  modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
+  modall = null
+}
+
+const stopPropagation = function(e) {
+  e.stopPropagation()
+}
+
+document.querySelectorAll(".js-modal").forEach(a => {
+  a.addEventListener("click", openModal)
+})
 
