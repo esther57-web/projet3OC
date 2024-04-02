@@ -145,7 +145,7 @@ if (token) {
 editMode()
 
 
-// afficher la modale
+///////////////////////////////// afficher et fermer la modale
 
 const openModal = function(e) {
   e.preventDefault()
@@ -172,8 +172,12 @@ const closeModal = function(e) {
   modal.querySelector(".close-modal-btn").removeEventListener("click", closeModal)
   modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
   modall = null
+
+  //retourner à la première vue automatiquement quand je ferme la modale
+  returnToModalGallery()
 }
 
+// fonction consistant à stopper une propagation
 const stopPropagation = function(e) {
   e.stopPropagation()
 }
@@ -182,3 +186,24 @@ document.querySelectorAll(".js-modal").forEach(a => {
   a.addEventListener("click", openModal)
 })
 
+//////////////////////////////// chemin première et seconde vue de la modale
+
+const firstModal = document.querySelector(".modal-gallery-photo")
+const secondModal = document.querySelector(".modal-add-photo")
+const backArrow = document.querySelector(".back-modal-btn")
+
+function ajouterUnePhoto() {
+  //mettre à jour les suppression de la galerie photo 
+
+  //passer à la seconde vue 
+  firstModal.style.display = "none"
+  secondModal.style.display = "block"
+  backArrow.style.visibility = "visible"
+}
+
+//retourner à la première vue
+function returnToModalGallery() {
+  firstModal.style.display = "block"
+  secondModal.style.display = "none"
+  backArrow.style.visibility = "hidden"
+}

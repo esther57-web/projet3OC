@@ -329,7 +329,15 @@ footer nav ul {
 }
 
 .modal-gallery-photo {
+	
+}
+
+.modal-add-photo {
 	display: none;
+}
+
+.back-modal-btn {
+	visibility: hidden;
 }
 
 
