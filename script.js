@@ -4,12 +4,16 @@ const galleryElement = document.querySelector(".gallery");
 const filterElement = document.querySelector(".filter");
 
 
-const allFilterBtn = [];
+//const allFilterBtn = [];
+let data;
+let uniqueCategories;
+
+
 
 async function initGallery() {
   try {
     const req = await fetch("http://localhost:5678/api/works");
-    const data = await req.json();
+    data = await req.json();
 
     // galerie fonctionnelle Javascript
     for (const objet of data) {
@@ -25,11 +29,15 @@ async function initGallery() {
       const figcaption = document.createElement("figcaption");
       figcaption.textContent = objet.title;
       figure.appendChild(figcaption);
+
+      
     }
+
+
 
     // Récupérer les différentes catégories d'objets
     const categories = data.map((objet) => objet.category.name);
-    const uniqueCategories = [...new Set(categories)];
+    uniqueCategories = [...new Set(categories)];
     uniqueCategories.unshift("Tout");
 
     function filtrer(filtre = "Tout") {
@@ -78,6 +86,7 @@ async function initGallery() {
 }
 
 initGallery();
+
 
 /************************************ Edit mode **********************************/
 
@@ -197,13 +206,89 @@ function ajouterUnePhoto() {
 
   //passer à la seconde vue 
   firstModal.style.display = "none"
-  secondModal.style.display = "block"
+  secondModal.style.display = "flex"
   backArrow.style.visibility = "visible"
 }
 
 //retourner à la première vue
 function returnToModalGallery() {
-  firstModal.style.display = "block"
+  firstModal.style.display = "flex"
   secondModal.style.display = "none"
   backArrow.style.visibility = "hidden"
 }
+
+
+async function galleryPhotoDisplay() {
+  await initGallery();
+  const allImages = data.map((objet) => objet)
+  const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
+
+  for (const [index] of data.entries()) {
+    
+    const divImage = document.createElement("div")
+    galleryPhotoDisplaySection.appendChild(divImage)
+
+    const imagesToDelete = document.createElement("img")
+    imagesToDelete.src = allImages[index].imageUrl
+    imagesToDelete.alt = allImages[index].title
+    imagesToDelete.classList.add("image-to-delete")
+    divImage.appendChild(imagesToDelete)
+
+    const deleteImagesBtn = document.createElement("button")
+    deleteImagesBtn.classList.add("delete-image-btn")
+    divImage.appendChild(deleteImagesBtn)
+
+    const deleteImagesIcon = document.createElement("img")
+    deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
+    deleteImagesIcon.alt = `delete id="${index+1}" photo`
+    deleteImagesIcon.id = index + 1
+    deleteImagesBtn.appendChild(deleteImagesIcon)
+
+  }
+
+  //console.log(allImages);
+
+  
+}
+
+galleryPhotoDisplay();
+
+// selectionner une catégorie dans le formulaire
+
+async function selectCategory() {
+  await initGallery();
+  const selectBar = document.querySelector(".category-img")
+  
+  for(const category of uniqueCategories) {
+    const categoryOption = document.createElement("option")
+    categoryOption.innerHTML = category
+    selectBar.appendChild(categoryOption)
+  }
+  
+
+  
+}
+
+selectCategory()
+
+//afficher l'image selectionnée dans le preview
+
+const fileInput = document.getElementById('file-input');
+
+fileInput.addEventListener('change', function() {
+  const beforePreview = document.querySelector(".preview-section")
+  const afterPreview = document.querySelector(".preview-section-after")
+
+  beforePreview.style.display = "none"
+  afterPreview.style.display = "flex"
+
+  const previewImage = document.createElement("img")
+  previewImage.src = `assets/images/${fileInput.files[0].name}`
+  previewImage.alt = fileInput.files[0].name
+  previewImage.classList.add("preview-image")
+  afterPreview.appendChild(previewImage)
+
+  console.log(previewImage)
+});
+
+

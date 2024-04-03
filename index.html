@@ -41,12 +41,34 @@
 		</section>
 		<section class="modal-add-photo">
 			<h2>Ajout photo</h2>
-			<form>
-				 
+			<form enctype="multipart/form-data" method="post" name="fileinfo">
+				<div class="preview-section">
+					<img class="img-preview-icon" src="assets/icons/image-regular.svg" alt="icone image">
+					<label for="file-input">+ ajouter photo</label>
+					<p>jpg, png : 4mo max</p>
+				</div>
+				<div class="preview-section-after">
+					
+				</div>
+				
+				<input id="file-input" class="file-input" value="ajouter" type="file" name="file" required />
+				
+				<label for="titre-img">Titre</label>
+				<input type="text" id="titre-img" required>
+				<label id="category-img">Catégorie</label>
+				<select class="category-img" id="category-img" required>
+					<option value="" selected disabled hidden></option>
+				</select>
 
-			</form>
-			<hr>
-			<input class="submit-add-photo-btn" type="submit" value="Valider">
+				<hr>
+				<div class="submit-section">
+					<input class="submit-add-photo-btn" type="submit" value="Valider">
+				</div>
+				
+				
+			  </form>
+			
+			
 		</section>		
 	</div>
 </aside>

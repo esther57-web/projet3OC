@@ -198,12 +198,21 @@ form {
 	margin-bottom: 3rem;
 }
 
-input {
+input, select {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	font-size: 14px;
+	font-weight: 400;
+	color: #444444;
+	padding: 0 1rem;
 }
+
+input:focus, select:focus {
+	outline: none;
+}
+
 label {
 	margin: 2em 0 1em 0;
 	text-align: start;
@@ -214,7 +223,7 @@ label {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -297,7 +306,6 @@ footer nav ul {
 	width: 100%;
 	height: 100%;
 	background: rgba(0, 0, 0, 0.7);
-	display: flex;
 	align-items: center;
 	justify-content: center;
 	display: none;
@@ -310,6 +318,7 @@ footer nav ul {
 	width: 630px;
 	padding: 1rem;
 	border-radius: 10px;
+	
 }
 
 .modal-navbar {
@@ -324,20 +333,147 @@ footer nav ul {
 	cursor: pointer;
 }
 
+
 .modal-wrapper section {
 	margin: 1rem;
+
 }
 
-.modal-gallery-photo {
-	
+
+
+.modal-wrapper input[type="submit"] {
+	margin: 1rem 0 0 0;
+	height: 36px;
 }
+
+.modal-wrapper h2 {
+	color: #000;
+	font-family: Work Sans;
+	font-weight: 400;
+}
+
+/* première vue */
+
+.modal-gallery-photo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 3rem;
+}
+
+.modal-gallery-photo hr {
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.gallery-photo-section {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+.gallery-photo-section div {
+	display: flex;
+}
+
+.image-to-delete {
+	width: 75px;
+	height: 100px;
+	margin-top: 1rem;
+}
+
+.delete-image-btn {
+	z-index: 2;
+	background-color: #000;
+	height: 17px;
+	width: 17px;
+	border: none;
+	border-radius: 2px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	position: relative;
+	right: 1.3rem;
+	top: 1.3rem;
+
+}
+
+/* seconde vue */
 
 .modal-add-photo {
 	display: none;
+	flex-direction: column;
+	align-items: center;
+}
+
+.modal-add-photo form {
+	width: 80%;
+	margin-bottom: 0;
+}
+
+.modal-add-photo hr {
+	width: 100%;
 }
 
 .back-modal-btn {
 	visibility: hidden;
 }
 
+.file-input {
+	display: none;
+}
 
+.preview-section, .preview-section-after {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #E8F1F6;
+	padding: 1rem;
+	
+}
+
+.preview-section p {
+	font-size: 10px;
+}
+
+.preview-section-after {
+	display: none;
+	padding: 0;
+}
+
+.img-preview-icon {
+	width: 68px;
+	height: 60px;
+}
+
+label[for="file-input"] {
+	background: #CBD6DC;
+	height: 36px;
+	width: 173px;
+	border-radius: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color:#306685;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.submit-section {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.submit-add-photo-btn {
+	background-color: #A7A7A7 !important;
+	cursor: default !important;
+}
+
+
+.preview-image {
+	width: 130px;
+	height: 100%;
+}
