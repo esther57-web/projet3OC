@@ -14,7 +14,7 @@ async function initGallery() {
   try {
     const req = await fetch("http://localhost:5678/api/works");
     data = await req.json();
-
+    console.log(data)
     // galerie fonctionnelle Javascript
     for (const objet of data) {
       const figure = document.createElement("figure");
@@ -39,6 +39,7 @@ async function initGallery() {
     const categories = data.map((objet) => objet.category.name);
     uniqueCategories = [...new Set(categories)];
     uniqueCategories.unshift("Tout");
+  
 
     function filtrer(filtre = "Tout") {
       const allFigure = document.querySelectorAll(".figure");
@@ -220,7 +221,8 @@ function returnToModalGallery() {
 
 async function galleryPhotoDisplay() {
   await initGallery();
-  const allImages = data.map((objet) => objet)
+  const allImages = data.map((element) => element)
+  //console.log(data)
   const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
 
   for (const [index] of data.entries()) {
@@ -246,7 +248,7 @@ async function galleryPhotoDisplay() {
 
   }
 
-  //console.log(allImages);
+  
 
   
 }
@@ -269,7 +271,7 @@ async function selectCategory() {
   
 }
 
-selectCategory()
+
 
 //afficher l'image selectionnée dans le preview
 
@@ -291,4 +293,56 @@ fileInput.addEventListener('change', function() {
   console.log(previewImage)
 });
 
+//
+
+const form = document.forms.namedItem("fileinfo");
+form.addEventListener(
+  "submit",
+  (event) => {
+    const output = document.querySelector(".output");
+    const formData = new FormData(form);
+
+    formData.append("CustomField", "Des données supplémentaires");
+
+    fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data"
+      },
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          alert("Fichier téléversé !")
+        } else {
+          alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
+        }
+      })
+      .catch(error => {
+        output.innerHTML = "Une erreur s'est produite lors de la tentative de téléversement du fichier.";
+      });
+    
+    event.preventDefault();
+  },
+  false,
+);
+
+
+// récupérer les valeurs du formulaire et l'envoyer à l'API
+
+function formDataValue() {
+
+  //récupérer le token pour s'authentifier
+  let token = sessionStorage.getItem("token")
+
+  //récupérer les éléments du formulaire
+  let newImage = `assets/images/${fileInput.files[0].name}`
+  let newTitle = document.getElementById("titre-img").value 
+  let select = document.querySelector(".category-img")
+  let newCategoryName = select.options[selectedIndex].innerHTML
+  let newCategoryId = select.options[selectedIndex].id
+
+}
 
