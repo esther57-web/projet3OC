@@ -9,13 +9,27 @@ let data;
 let uniqueCategories;
 
 
-
-async function initGallery() {
+async function initData() {
   try {
     const req = await fetch("http://localhost:5678/api/works");
     data = await req.json();
-    console.log(data)
-    // galerie fonctionnelle Javascript
+    
+    initGallery(data);
+    setCategory(data)
+    initFilterBtn(data);
+    selectCategory(data)
+
+    galleryPhotoDisplay(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+initData()
+
+// galerie fonctionnelle Javascript
+function initGallery(data) {  
+  
     for (const objet of data) {
       const figure = document.createElement("figure");
       galleryElement.appendChild(figure);
@@ -31,63 +45,62 @@ async function initGallery() {
       figure.appendChild(figcaption);
 
       
-    }
-
-
-
-    // Récupérer les différentes catégories d'objets
-    const categories = data.map((objet) => objet.category.name);
-    uniqueCategories = [...new Set(categories)];
-    uniqueCategories.unshift("Tout");
-  
-
-    function filtrer(filtre = "Tout") {
-      const allFigure = document.querySelectorAll(".figure");
-
-      for (const [index, figure] of allFigure.entries()) {
-        const category = data[index].category.name;
-        figure.setAttribute('data-category', category);
-        if (category === filtre || filtre === "Tout") {
-          figure.classList.remove("hidden");
-        } else {
-          figure.classList.add("hidden");
-        }
-      }
-      
-    }
-
-    for (const category of uniqueCategories) {
-      const filterBtn = document.createElement("button");
-      filterBtn.textContent = category;
-      filterBtn.classList.add("filter-btn");
-
-      if (category === "Tout") {
-        filterBtn.classList.add("active-filter-btn");
-      }
-
-      filterBtn.addEventListener("click", () => {
-        const allFilterBtn = document.querySelectorAll(".filter-btn");
-        filtrer(category);
-        for (const currentFilterBtn of allFilterBtn) {
-          if (currentFilterBtn === filterBtn) {
-            currentFilterBtn.classList.add("active-filter-btn");
-          } else {
-            currentFilterBtn.classList.remove("active-filter-btn");
-          }
-        }
-      });
-
-      filterElement.appendChild(filterBtn);
-    }
-
-    filtrer();
-  } catch (err) {
-    console.error(err);
-  }
+    } 
 }
 
-initGallery();
 
+// filtrer = masquer les figures selon la catégorie
+function filtrer(filtre = "Tout") {
+  const allFigure = document.querySelectorAll(".figure");
+  console.log(data)
+  for (const [index, figure] of allFigure.entries()) {
+    const category = data[index].category.name;
+    figure.setAttribute('data-category', category);
+    if (category === filtre || filtre === "Tout") {
+      figure.classList.remove("hidden");
+    } else {
+      figure.classList.add("hidden");
+    }
+  }
+
+}
+
+function setCategory(data) {
+  const categories = data.map((objet) => objet.category.name);
+  uniqueCategories = [...new Set(categories)];
+  uniqueCategories.unshift("Tout");
+}
+
+function initFilterBtn(data) {
+    
+  
+
+  //active filter
+  for (const category of uniqueCategories) {
+    const filterBtn = document.createElement("button");
+    filterBtn.textContent = category;
+    filterBtn.classList.add("filter-btn");
+
+    if (category === "Tout") {
+      filterBtn.classList.add("active-filter-btn");
+    }
+
+    filterBtn.addEventListener("click", () => {
+      const allFilterBtn = document.querySelectorAll(".filter-btn");
+      filtrer(category);
+      for (const currentFilterBtn of allFilterBtn) {
+        if (currentFilterBtn === filterBtn) {
+          currentFilterBtn.classList.add("active-filter-btn");
+        } else {
+          currentFilterBtn.classList.remove("active-filter-btn");
+        }
+      }
+    });
+
+    filterElement.appendChild(filterBtn);
+  }
+
+}
 
 /************************************ Edit mode **********************************/
 
@@ -218,11 +231,10 @@ function returnToModalGallery() {
   backArrow.style.visibility = "hidden"
 }
 
-
-async function galleryPhotoDisplay() {
-  await initGallery();
+//afficher les images dans la modale
+function galleryPhotoDisplay(data) {
+ 
   const allImages = data.map((element) => element)
-  //console.log(data)
   const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
 
   for (const [index] of data.entries()) {
@@ -247,29 +259,32 @@ async function galleryPhotoDisplay() {
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
   }
-
-  
-
   
 }
 
-galleryPhotoDisplay();
+
+
+
 
 // selectionner une catégorie dans le formulaire
 
-async function selectCategory() {
-  await initGallery();
+function selectCategory() {
   const selectBar = document.querySelector(".category-img")
+ 
   
   for(const category of uniqueCategories) {
-    const categoryOption = document.createElement("option")
+    if (category !== "Tout") {
+      const categoryOption = document.createElement("option")
     categoryOption.innerHTML = category
     selectBar.appendChild(categoryOption)
+    }
+    
+    
   }
-  
-
-  
+ 
 }
+
+
 
 
 
@@ -290,7 +305,7 @@ fileInput.addEventListener('change', function() {
   previewImage.classList.add("preview-image")
   afterPreview.appendChild(previewImage)
 
-  console.log(previewImage)
+  
 });
 
 //
@@ -299,11 +314,7 @@ const form = document.forms.namedItem("fileinfo");
 form.addEventListener(
   "submit",
   (event) => {
-    const output = document.querySelector(".output");
-    const formData = new FormData(form);
-
-    formData.append("CustomField", "Des données supplémentaires");
-
+    formDataValue()
     fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
@@ -329,6 +340,25 @@ form.addEventListener(
   false,
 );
 
+// Si tous les champs du formulaire sont remplis, le bouton valider du formulaire sera vert et en cursor pointer
+document.getElementById("titre-img").addEventListener("input", formSubmitBtnActive);
+document.querySelector(".category-img").addEventListener("input", formSubmitBtnActive);
+document.getElementById("file-input").addEventListener("change", formSubmitBtnActive);
+
+function formSubmitBtnActive() {
+  const fileInput = document.getElementById('file-input');
+  let newTitle = document.getElementById("titre-img").value
+  let select = document.querySelector(".category-img")
+  const formSubmitBtn = document.querySelector(".submit-add-photo-btn")
+
+  console.log(fileInput.files[0], newTitle, select.options[select.selectedIndex].innerText )
+
+  if (fileInput.files[0] != undefined && newTitle != "" && select.options[select.selectedIndex].innerText != "") {
+    formSubmitBtn.style.backgroundColor = "#1D6154";
+    formSubmitBtn.style.cursor = "pointer";
+  }
+}
+
 
 // récupérer les valeurs du formulaire et l'envoyer à l'API
 
@@ -338,11 +368,19 @@ function formDataValue() {
   let token = sessionStorage.getItem("token")
 
   //récupérer les éléments du formulaire
+  const fileInput = document.getElementById('file-input');
   let newImage = `assets/images/${fileInput.files[0].name}`
   let newTitle = document.getElementById("titre-img").value 
   let select = document.querySelector(".category-img")
-  let newCategoryName = select.options[selectedIndex].innerHTML
-  let newCategoryId = select.options[selectedIndex].id
-
+  let newCategoryName = select.options[select.selectedIndex].innerHTML
+  let newCategoryId = select.options[select.selectedIndex].id
+  // les stocker dans formData
+  let formData = new FormData(form);
+  formData.append("title", newTitle)
+  formData.append("imageUrl", newImage)
+  formData.append("category", newCategoryName)
+ 
 }
+
+
 
