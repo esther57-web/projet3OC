@@ -7,6 +7,7 @@ const filterElement = document.querySelector(".filter");
 //const allFilterBtn = [];
 let data;
 let uniqueCategories;
+let token;
 
 
 async function initData() {
@@ -109,7 +110,7 @@ function initFilterBtn(data) {
 // page d'édition
 function editMode() {
   // Vérifier si l'utilisateur est connecté
-const token = sessionStorage.getItem("authToken");
+token = sessionStorage.getItem("authToken");
 const body = document.querySelector("body")
 
 if (token) {
@@ -308,38 +309,6 @@ fileInput.addEventListener('change', function() {
   
 });
 
-//
-
-const form = document.forms.namedItem("fileinfo");
-form.addEventListener(
-  "submit",
-  (event) => {
-    formDataValue()
-    fetch("http://localhost:5678/api/works", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data"
-      },
-      body: formData
-    })
-      .then(response => {
-        if (response.ok) {
-          alert("Fichier téléversé !")
-        } else {
-          alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
-        }
-      })
-      .catch(error => {
-        output.innerHTML = "Une erreur s'est produite lors de la tentative de téléversement du fichier.";
-      });
-    
-    event.preventDefault();
-  },
-  false,
-);
-
 // Si tous les champs du formulaire sont remplis, le bouton valider du formulaire sera vert et en cursor pointer
 document.getElementById("titre-img").addEventListener("input", formSubmitBtnActive);
 document.querySelector(".category-img").addEventListener("input", formSubmitBtnActive);
@@ -350,8 +319,6 @@ function formSubmitBtnActive() {
   let newTitle = document.getElementById("titre-img").value
   let select = document.querySelector(".category-img")
   const formSubmitBtn = document.querySelector(".submit-add-photo-btn")
-
-  console.log(fileInput.files[0], newTitle, select.options[select.selectedIndex].innerText )
 
   if (fileInput.files[0] != undefined && newTitle != "" && select.options[select.selectedIndex].innerText != "") {
     formSubmitBtn.style.backgroundColor = "#1D6154";
@@ -365,7 +332,7 @@ function formSubmitBtnActive() {
 function formDataValue() {
 
   //récupérer le token pour s'authentifier
-  let token = sessionStorage.getItem("token")
+  token = sessionStorage.getItem("authToken")
 
   //récupérer les éléments du formulaire
   const fileInput = document.getElementById('file-input');
@@ -375,12 +342,55 @@ function formDataValue() {
   let newCategoryName = select.options[select.selectedIndex].innerHTML
   let newCategoryId = select.options[select.selectedIndex].id
   // les stocker dans formData
+
   let formData = new FormData(form);
   formData.append("title", newTitle)
   formData.append("imageUrl", newImage)
-  formData.append("category", newCategoryName)
- 
+  formData.append("category", newCategoryId)
+  //console.log(formData)
+  //for (let pair of formData.entries()) {
+  //  console.log(pair[0] + ': ' + pair[1]);
+  //}
+ // Retourner le token et formData
+ return {
+  formData
+};
 }
 
 
+
+const form = document.forms.namedItem("fileinfo");
+form.addEventListener(
+  "submit",
+  (event) => {
+    event.preventDefault();
+    const { formData } = formDataValue();
+    //console.log(formData)
+    fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        authorization: `Bearer ${token}`,
+        //"Content-Type": "multipart/form-data"
+      },
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          alert("Fichier téléversé !")
+        } else {
+          console.log(response)
+          alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
+        }
+      })
+      .catch(error => {
+        output.innerHTML = "Une erreur s'est produite lors de la tentative de téléversement du fichier.";
+      });
+    
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+  },
+  false,
+);
 
