@@ -53,7 +53,7 @@ function initGallery(data) {
 // filtrer = masquer les figures selon la catégorie
 function filtrer(filtre = "Tout") {
   const allFigure = document.querySelectorAll(".figure");
-  console.log(data)
+  
   for (const [index, figure] of allFigure.entries()) {
     const category = data[index].category.name;
     figure.setAttribute('data-category', category);
@@ -67,9 +67,18 @@ function filtrer(filtre = "Tout") {
 }
 
 function setCategory(data) {
-  const categories = data.map((objet) => objet.category.name);
-  uniqueCategories = [...new Set(categories)];
-  uniqueCategories.unshift("Tout");
+  let listOfCategories = new Set();
+  //get set of string categories
+  data.forEach((objet) => {
+    listOfCategories.add(JSON.stringify(objet.category));
+  });
+  //push stringified categories in array
+  const tableauCategories = [...listOfCategories];
+  //parse array to get objects back
+  uniqueCategories = tableauCategories.map((s) => JSON.parse(s));
+  uniqueCategories.unshift({id: 0, name: "Tout"})
+  
+  
 }
 
 function initFilterBtn(data) {
@@ -79,16 +88,16 @@ function initFilterBtn(data) {
   //active filter
   for (const category of uniqueCategories) {
     const filterBtn = document.createElement("button");
-    filterBtn.textContent = category;
+    filterBtn.textContent = category.name;
     filterBtn.classList.add("filter-btn");
 
-    if (category === "Tout") {
+    if (category.name === "Tout") {
       filterBtn.classList.add("active-filter-btn");
     }
 
     filterBtn.addEventListener("click", () => {
       const allFilterBtn = document.querySelectorAll(".filter-btn");
-      filtrer(category);
+      filtrer(category.name);
       for (const currentFilterBtn of allFilterBtn) {
         if (currentFilterBtn === filterBtn) {
           currentFilterBtn.classList.add("active-filter-btn");
@@ -102,6 +111,7 @@ function initFilterBtn(data) {
   }
 
 }
+
 
 /************************************ Edit mode **********************************/
 
@@ -274,10 +284,12 @@ function selectCategory() {
  
   
   for(const category of uniqueCategories) {
-    if (category !== "Tout") {
+    if (category.name !== "Tout") {
       const categoryOption = document.createElement("option")
-    categoryOption.innerHTML = category
-    selectBar.appendChild(categoryOption)
+      categoryOption.innerHTML = category.name
+      categoryOption.id = category.id
+      selectBar.appendChild(categoryOption)
+      
     }
     
     
@@ -341,17 +353,14 @@ function formDataValue() {
   let select = document.querySelector(".category-img")
   let newCategoryName = select.options[select.selectedIndex].innerHTML
   let newCategoryId = select.options[select.selectedIndex].id
+  
   // les stocker dans formData
 
   let formData = new FormData(form);
   formData.append("title", newTitle)
   formData.append("imageUrl", newImage)
   formData.append("category", newCategoryId)
-  //console.log(formData)
-  //for (let pair of formData.entries()) {
-  //  console.log(pair[0] + ': ' + pair[1]);
-  //}
- // Retourner le token et formData
+  
  return {
   formData
 };
