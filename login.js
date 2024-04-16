@@ -30,10 +30,11 @@ function login() {
         .then(data => {
             // Récupération du token d'authentification
             const token = data.token;
+           
             // Stockage du token dans Session Storage
             sessionStorage.setItem("authToken", token);
             window.location.href = "index.html";
-            console.log(token);
+            
             
 
         })
@@ -50,5 +51,4 @@ function login() {
 }
 
 login()
-
 

@@ -116,6 +116,12 @@ function initFilterBtn(data) {
 /************************************ Edit mode **********************************/
 
 
+//function logout() {
+  // Supprime le token d'authentification du Session Storage
+  //sessionStorage.removeItem("authToken");
+  // Actualise la page
+  //location.reload();
+//}
 
 // page d'édition
 function editMode() {
@@ -128,6 +134,9 @@ if (token) {
   
   const loginBtn = document.querySelector(".login-btn");              
   loginBtn.textContent = "logout"; 
+  //loginBtn.removeAttribute("href", "login.html")
+  //loginBtn.setAttribute("onclick", logout())
+  
   
   // mode edition bar
   const modeEditionBar = document.createElement("div");
@@ -251,7 +260,10 @@ function galleryPhotoDisplay(data) {
   for (const [index] of data.entries()) {
     
     const divImage = document.createElement("div")
+    divImage.classList.add("modal-gallery-div")
+    divImage.id = index + 1
     galleryPhotoDisplaySection.appendChild(divImage)
+    
 
     const imagesToDelete = document.createElement("img")
     imagesToDelete.src = allImages[index].imageUrl
@@ -262,11 +274,11 @@ function galleryPhotoDisplay(data) {
     const deleteImagesBtn = document.createElement("button")
     deleteImagesBtn.classList.add("delete-image-btn")
     divImage.appendChild(deleteImagesBtn)
+    deleteImagesBtn.setAttribute("onclick", `deleteWork(${index+1})`)
 
     const deleteImagesIcon = document.createElement("img")
     deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
     deleteImagesIcon.alt = `delete id="${index+1}" photo`
-    deleteImagesIcon.id = index + 1
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
   }
@@ -338,6 +350,47 @@ function formSubmitBtnActive() {
   }
 }
 
+//////////////////////////////////////// Supprimer un travail /////////////////////////////////////////////
+
+
+function deleteWorkApi(id) {
+  fetch(`http://localhost:5678/api/works/${id}`, {
+    method: "DELETE",
+    headers: {
+      accept: "*/*",
+      authorization: `Bearer ${token}`,
+    }
+    
+  })
+    .then(response => {
+      if (response.ok) {
+        alert("Fichier supprimé !")
+      } else {
+        console.log(response)
+        alert(`Erreur ${response.status} lors de la tentative de suppression du travail.<br />`);
+      }
+    })
+    .catch(error => {
+      output.innerHTML = "Une erreur s'est produite lors de la tentative de suppression du travail.";
+    }); 
+}
+
+
+
+function deleteWork(index) {
+  
+  const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section")
+  for (const element of galleryPhotoDisplaySection.children) {
+    //if (element.id = index) {
+      //element.style.display("none")
+    //  console.log(element)
+    //}
+    console.log(index)
+  }
+  
+}
+
+//////////////////////////////////////// Ajouter un travail ///////////////////////////////////////////////
 
 // récupérer les valeurs du formulaire et l'envoyer à l'API
 
@@ -359,7 +412,12 @@ function formDataValue() {
   let formData = new FormData(form);
   formData.append("title", newTitle)
   formData.append("imageUrl", newImage)
-  formData.append("category", newCategoryId)
+  formData.append("categoryId", newCategoryId)
+
+  // supprimer object file de formData
+  //if (formData.has("file")) {
+  //  formData.delete("file");
+  //}
   
  return {
   formData
@@ -373,19 +431,20 @@ form.addEventListener(
   "submit",
   (event) => {
     event.preventDefault();
-    const { formData } = formDataValue();
-    //console.log(formData)
+    
+    let {formData} = formDataValue()
+    console.log(token)
     fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
         accept: "application/json",
         authorization: `Bearer ${token}`,
-        //"Content-Type": "multipart/form-data"
+        
       },
       body: formData
     })
       .then(response => {
-        if (response.ok) {
+        if (response.status === "201") {
           alert("Fichier téléversé !")
         } else {
           console.log(response)
