@@ -7,14 +7,14 @@ const filterElement = document.querySelector(".filter");
 //const allFilterBtn = [];
 let data;
 let uniqueCategories;
-let token;
+let token = sessionStorage.getItem("authToken")
 
 
 async function initData() {
   try {
     const req = await fetch("http://localhost:5678/api/works");
     data = await req.json();
-    
+    console.log(data)
     initGallery(data);
     setCategory(data)
     initFilterBtn(data);
@@ -126,7 +126,7 @@ function initFilterBtn(data) {
 // page d'édition
 function editMode() {
   // Vérifier si l'utilisateur est connecté
-token = sessionStorage.getItem("authToken");
+
 const body = document.querySelector("body")
 
 if (token) {
@@ -400,8 +400,8 @@ function formDataValue() {
   token = sessionStorage.getItem("authToken")
 
   //récupérer les éléments du formulaire
-  const fileInput = document.getElementById('file-input');
-  let newImage = `assets/images/${fileInput.files[0].name}`
+  
+  let newImage = document.getElementById('file-input').files[0]
   let newTitle = document.getElementById("titre-img").value 
   let select = document.querySelector(".category-img")
   let newCategoryName = select.options[select.selectedIndex].innerHTML
@@ -409,10 +409,10 @@ function formDataValue() {
   
   // les stocker dans formData
 
-  let formData = new FormData(form);
+  let formData = new FormData();
   formData.append("title", newTitle)
-  formData.append("imageUrl", newImage)
-  formData.append("categoryId", newCategoryId)
+  formData.append("image", newImage)
+  formData.append("category", newCategoryId)
 
   // supprimer object file de formData
   //if (formData.has("file")) {
@@ -431,7 +431,7 @@ form.addEventListener(
   "submit",
   (event) => {
     event.preventDefault();
-    
+    formDataValue()
     let {formData} = formDataValue()
     console.log(token)
     fetch("http://localhost:5678/api/works", {
@@ -444,7 +444,7 @@ form.addEventListener(
       body: formData
     })
       .then(response => {
-        if (response.status === "201") {
+        if (response.status === 201) {
           alert("Fichier téléversé !")
         } else {
           console.log(response)
@@ -455,9 +455,9 @@ form.addEventListener(
         output.innerHTML = "Une erreur s'est produite lors de la tentative de téléversement du fichier.";
       });
     
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
+    //for (let pair of formData.entries()) {
+    //  console.log(pair[0] + ': ' + pair[1]);
+    //}
   },
   false,
 );
