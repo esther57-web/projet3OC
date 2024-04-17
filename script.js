@@ -14,19 +14,25 @@ async function initData() {
   try {
     const req = await fetch("http://localhost:5678/api/works");
     data = await req.json();
-    console.log(data)
+
+    
+
+    //console.log(data)
     initGallery(data);
     setCategory(data)
     initFilterBtn(data);
     selectCategory(data)
 
     galleryPhotoDisplay(data);
+    
   } catch (error) {
     console.error(error);
   }
 }
 
 initData()
+
+
 
 // galerie fonctionnelle Javascript
 function initGallery(data) {  
@@ -254,31 +260,32 @@ function returnToModalGallery() {
 //afficher les images dans la modale
 function galleryPhotoDisplay(data) {
  
-  const allImages = data.map((element) => element)
+  console.log(data)
   const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
-
-  for (const [index] of data.entries()) {
+  
+  for (let i = 0; i < data.length; i++) {
+    //console.log(data[i].id)
     
     const divImage = document.createElement("div")
     divImage.classList.add("modal-gallery-div")
-    divImage.id = index + 1
+    divImage.id = data[i].id
     galleryPhotoDisplaySection.appendChild(divImage)
     
 
     const imagesToDelete = document.createElement("img")
-    imagesToDelete.src = allImages[index].imageUrl
-    imagesToDelete.alt = allImages[index].title
+    imagesToDelete.src = data[i].imageUrl
+    imagesToDelete.alt = data[i].title
     imagesToDelete.classList.add("image-to-delete")
     divImage.appendChild(imagesToDelete)
 
     const deleteImagesBtn = document.createElement("button")
     deleteImagesBtn.classList.add("delete-image-btn")
     divImage.appendChild(deleteImagesBtn)
-    deleteImagesBtn.setAttribute("onclick", `deleteWork(${index+1})`)
+    deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${data[i].id})`)
 
     const deleteImagesIcon = document.createElement("img")
     deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
-    deleteImagesIcon.alt = `delete id="${index+1}" photo`
+    deleteImagesIcon.alt = `delete id="${data[i].id}" photo`
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
   }
@@ -352,8 +359,15 @@ function formSubmitBtnActive() {
 
 //////////////////////////////////////// Supprimer un travail /////////////////////////////////////////////
 
+function deleteWorkModal(id) {
+  const modalWork = document.querySelector(`.modal-gallery-div#${id}`)
+  console.log(modalWork)
+  //modalWork.style.display = "none"
+}
 
-function deleteWorkApi(id) {
+deleteWorkModal()
+
+function deleteWorkData(id) {
   fetch(`http://localhost:5678/api/works/${id}`, {
     method: "DELETE",
     headers: {
@@ -363,32 +377,24 @@ function deleteWorkApi(id) {
     
   })
     .then(response => {
-      if (response.ok) {
+      if (response.status === 200 || response.status === 204 ) {
+        //deleteWorkModal(id)
         alert("Fichier supprimé !")
       } else {
         console.log(response)
         alert(`Erreur ${response.status} lors de la tentative de suppression du travail.<br />`);
+        
       }
     })
     .catch(error => {
-      output.innerHTML = "Une erreur s'est produite lors de la tentative de suppression du travail.";
+      alert("Une erreur s'est produite lors de la tentative de suppression du travail.");
     }); 
 }
 
 
 
-function deleteWork(index) {
-  
-  const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section")
-  for (const element of galleryPhotoDisplaySection.children) {
-    //if (element.id = index) {
-      //element.style.display("none")
-    //  console.log(element)
-    //}
-    console.log(index)
-  }
-  
-}
+
+
 
 //////////////////////////////////////// Ajouter un travail ///////////////////////////////////////////////
 
