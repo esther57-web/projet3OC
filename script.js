@@ -260,11 +260,10 @@ function returnToModalGallery() {
 //afficher les images dans la modale
 function galleryPhotoDisplay(data) {
  
-  console.log(data)
   const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
   
   for (let i = 0; i < data.length; i++) {
-    //console.log(data[i].id)
+    
     
     const divImage = document.createElement("div")
     divImage.classList.add("modal-gallery-div")
@@ -360,12 +359,18 @@ function formSubmitBtnActive() {
 //////////////////////////////////////// Supprimer un travail /////////////////////////////////////////////
 
 function deleteWorkModal(id) {
-  const modalWork = document.querySelector(`.modal-gallery-div#${id}`)
-  console.log(modalWork)
+  
+  //let modalWork = document.querySelector(`.modal-gallery-div #${id}`)
   //modalWork.style.display = "none"
 }
 
-deleteWorkModal()
+//j'essaie ici de selectionner chaque div de la galerie photo de la modale par rapport à son id 
+//pour la placer dans la fonction du dessus
+//mais je n'arrive même pas à selectionner une des div tout court (exemple 16) 
+//j'ai toujours null ou is not a valid selector dans la console
+
+let modalWork = document.querySelector(".gallery-photo-section #16")
+console.log(modalWork)
 
 function deleteWorkData(id) {
   fetch(`http://localhost:5678/api/works/${id}`, {
@@ -439,7 +444,7 @@ form.addEventListener(
     event.preventDefault();
     formDataValue()
     let {formData} = formDataValue()
-    console.log(token)
+   
     fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
@@ -461,9 +466,7 @@ form.addEventListener(
         output.innerHTML = "Une erreur s'est produite lors de la tentative de téléversement du fichier.";
       });
     
-    //for (let pair of formData.entries()) {
-    //  console.log(pair[0] + ': ' + pair[1]);
-    //}
+    
   },
   false,
 );
