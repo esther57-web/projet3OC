@@ -41,6 +41,7 @@ function initGallery(data) {
       const figure = document.createElement("figure");
       galleryElement.appendChild(figure);
       figure.classList.add("figure")
+      figure.id = objet.id
 
       const image = new Image();
       image.src = objet.imageUrl;
@@ -265,7 +266,7 @@ function galleryPhotoDisplay(data) {
   for (let i = 0; i < data.length; i++) {
     
     
-    const divImage = document.createElement("div")
+    let divImage = document.createElement("div")
     divImage.classList.add("modal-gallery-div")
     divImage.id = data[i].id
     galleryPhotoDisplaySection.appendChild(divImage)
@@ -286,6 +287,18 @@ function galleryPhotoDisplay(data) {
     deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
     deleteImagesIcon.alt = `delete id="${data[i].id}" photo`
     deleteImagesBtn.appendChild(deleteImagesIcon)
+
+    //supprimer le travail dans le dom
+    deleteImagesBtn.addEventListener("click", () => {
+      divImage.remove()
+      let figures = document.querySelectorAll(".figure")
+      figures.forEach((figure)=> {
+        if(data[i].id == figure.id)
+          figure.remove()
+      })
+      
+      
+    })
 
   }
   
@@ -358,20 +371,10 @@ function formSubmitBtnActive() {
 
 //////////////////////////////////////// Supprimer un travail /////////////////////////////////////////////
 
-function deleteWorkModal(id) {
-  
-  //let modalWork = document.querySelector(`.modal-gallery-div #${id}`)
-  //modalWork.style.display = "none"
-}
+//suppression immédiate du travail dans le DOM ligne 291
 
-//j'essaie ici de selectionner chaque div de la galerie photo de la modale par rapport à son id 
-//pour la placer dans la fonction du dessus
-//mais je n'arrive même pas à selectionner une des div tout court (exemple 16) 
-//j'ai toujours null ou is not a valid selector dans la console
 
-let modalWork = document.querySelector(".gallery-photo-section #16")
-console.log(modalWork)
-
+//suppression du travail dans l'API
 function deleteWorkData(id) {
   fetch(`http://localhost:5678/api/works/${id}`, {
     method: "DELETE",
@@ -402,6 +405,10 @@ function deleteWorkData(id) {
 
 
 //////////////////////////////////////// Ajouter un travail ///////////////////////////////////////////////
+
+//
+
+
 
 // récupérer les valeurs du formulaire et l'envoyer à l'API
 
@@ -457,6 +464,7 @@ form.addEventListener(
       .then(response => {
         if (response.status === 201) {
           alert("Fichier téléversé !")
+          //récupérer la réponse et poster dans le dom
         } else {
           console.log(response)
           alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
