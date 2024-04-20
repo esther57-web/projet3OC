@@ -259,9 +259,12 @@ function returnToModalGallery() {
 }
 
 //afficher les images dans la modale
+
+const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
+
 function galleryPhotoDisplay(data) {
  
-  const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
+  
   
   for (let i = 0; i < data.length; i++) {
     
@@ -288,7 +291,7 @@ function galleryPhotoDisplay(data) {
     deleteImagesIcon.alt = `delete id="${data[i].id}" photo`
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
-    //supprimer le travail dans le dom
+    //supprimer le travail dans le dom sans recharger la page
     deleteImagesBtn.addEventListener("click", () => {
       divImage.remove()
       let figures = document.querySelectorAll(".figure")
@@ -432,24 +435,66 @@ function formDataValue() {
   formData.append("image", newImage)
   formData.append("category", newCategoryId)
 
-  // supprimer object file de formData
-  //if (formData.has("file")) {
-  //  formData.delete("file");
-  //}
   
  return {
   formData
 };
 }
 
+//ajouter la nouvelle figure dans la galerie puis suppression au moment de l'actualisation
+function addWorkGallery(newData) {
+  
+  const figure = document.createElement("figure");
+  galleryElement.appendChild(figure);
+  figure.classList.add("figure")
+  figure.classList.add("new-work")
+  figure.id = newData.id
 
+  const image = new Image();
+  image.src = newData.imageUrl;
+  image.alt = newData.title;
+  figure.appendChild(image);
+
+  const figcaption = document.createElement("figcaption");
+  figcaption.textContent = newData.title;
+  figure.appendChild(figcaption);
+
+}
+
+//ajouter la nouvelle figure dans la modale puis suppression au moment de l'actualisation
+function addWorkModal(newData) {
+  
+
+  let divImage = document.createElement("div")
+    divImage.classList.add("modal-gallery-div")
+    divImage.classList.add("new-work-modal")
+    divImage.id = newData.id
+    galleryPhotoDisplaySection.appendChild(divImage)
+    
+
+    const imagesToDelete = document.createElement("img")
+    imagesToDelete.src = newData.imageUrl
+    imagesToDelete.alt = newData.title
+    imagesToDelete.classList.add("image-to-delete")
+    divImage.appendChild(imagesToDelete)
+
+    const deleteImagesBtn = document.createElement("button")
+    deleteImagesBtn.classList.add("delete-image-btn")
+    divImage.appendChild(deleteImagesBtn)
+    deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${newData.id})`)
+
+    const deleteImagesIcon = document.createElement("img")
+    deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
+    deleteImagesIcon.alt = `delete id="${newData.id}" photo`
+    deleteImagesBtn.appendChild(deleteImagesIcon)
+}
 
 const form = document.forms.namedItem("fileinfo");
 form.addEventListener(
   "submit",
   (event) => {
     event.preventDefault();
-    formDataValue()
+    
     let {formData} = formDataValue()
    
     fetch("http://localhost:5678/api/works", {
@@ -464,14 +509,28 @@ form.addEventListener(
       .then(response => {
         if (response.status === 201) {
           alert("Fichier téléversé !")
-          //récupérer la réponse et poster dans le dom
+          // Récupérer la réponse du serveur au format JSON
+          return response.json(); 
+          
         } else {
           console.log(response)
           alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
         }
       })
+      .then(newData => {
+        addWorkModal(newData)
+        addWorkGallery(newData)
+        // Supprimer la figure lors du rechargement de la page
+        window.addEventListener('load', () => {
+          const figureToRemove = document.querySelector(".new-work");
+          const modalDivToRemove = document.querySelector(".new-work-modal")
+          figureToRemove.remove()
+          modalDivToRemove.remove()
+        });
+        
+      })
       .catch(error => {
-        output.innerHTML = "Une erreur s'est produite lors de la tentative de téléversement du fichier.";
+        alert("Une erreur s'est produite lors de la tentative de téléversement du fichier.");
       });
     
     
