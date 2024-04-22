@@ -4,7 +4,7 @@ function login() {
     
     logForm.addEventListener("submit", function (event) {
         event.preventDefault();
-        // Création de l’objet du nouvel avis.
+        //récupération des informations d'authentification sous forme d'objet javascript
         const user = {
             email: event.target.querySelector("[name=email]").value,
             password: event.target.querySelector("[name=password]").value,

@@ -62,6 +62,7 @@ function filtrer(filtre = "Tout") {
   const allFigure = document.querySelectorAll(".figure");
   
   for (const [index, figure] of allFigure.entries()) {
+    //récupération des noms de catégories de chaque objets de data
     const category = data[index].category.name;
     figure.setAttribute('data-category', category);
     if (category === filtre || filtre === "Tout") {
@@ -75,14 +76,15 @@ function filtrer(filtre = "Tout") {
 
 function setCategory(data) {
   let listOfCategories = new Set();
-  //get set of string categories
+  //récupération de chaque categories de data en texte json
   data.forEach((objet) => {
     listOfCategories.add(JSON.stringify(objet.category));
   });
-  //push stringified categories in array
+  //ajout de chaque catégorie dans un tableau
   const tableauCategories = [...listOfCategories];
-  //parse array to get objects back
+  //récupération des tableaux d'objets en objet javascript
   uniqueCategories = tableauCategories.map((s) => JSON.parse(s));
+  //ajout de la catégorie "Tout" en première position
   uniqueCategories.unshift({id: 0, name: "Tout"})
   
   
@@ -207,7 +209,7 @@ const openModal = function(e) {
   modal.querySelector(".close-modal-btn").addEventListener("click", closeModal)
   //fermer la modale en cliquant dans le vide (à suivre en dessous)
   modal.addEventListener("click", closeModal)
-  //stopper la propagation de closeModal jusqu'à la fenêtre modale
+  //stopper la propagation de closeModal jusqu'à la fenêtre modale modal-wrapper
   modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
   
 }
@@ -232,6 +234,7 @@ const stopPropagation = function(e) {
   e.stopPropagation()
 }
 
+// ouvrir la modale au clic du bouton modifier
 document.querySelectorAll(".js-modal").forEach(a => {
   a.addEventListener("click", openModal)
 })
@@ -243,8 +246,7 @@ const secondModal = document.querySelector(".modal-add-photo")
 const backArrow = document.querySelector(".back-modal-btn")
 
 function ajouterUnePhoto() {
-  //mettre à jour les suppression de la galerie photo 
-
+ 
   //passer à la seconde vue 
   firstModal.style.display = "none"
   secondModal.style.display = "flex"
@@ -374,7 +376,7 @@ function formSubmitBtnActive() {
 
 //////////////////////////////////////// Supprimer un travail /////////////////////////////////////////////
 
-//suppression immédiate du travail dans le DOM ligne 291
+//suppression immédiate du travail dans le DOM ligne 297
 
 
 //suppression du travail dans l'API
@@ -389,7 +391,6 @@ function deleteWorkData(id) {
   })
     .then(response => {
       if (response.status === 200 || response.status === 204 ) {
-        //deleteWorkModal(id)
         alert("Fichier supprimé !")
       } else {
         console.log(response)
@@ -404,21 +405,12 @@ function deleteWorkData(id) {
 
 
 
-
-
-
 //////////////////////////////////////// Ajouter un travail ///////////////////////////////////////////////
-
-//
-
 
 
 // récupérer les valeurs du formulaire et l'envoyer à l'API
 
 function formDataValue() {
-
-  //récupérer le token pour s'authentifier
-  token = sessionStorage.getItem("authToken")
 
   //récupérer les éléments du formulaire
   
