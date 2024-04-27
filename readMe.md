@@ -18,11 +18,27 @@ J'ai eu accès à un code back-end pour tester les fonctionnalités. J'ai commun
 
 J'ai utilisé Figma pour accéder aux maquettes, Visual Studio Code pour le développement, et GitHub pour la gestion de version de votre projet.
 
+# Compte administrateur
+
+email : sophie.bluel@test.tld <br>
+password : S0phie
+
 # Technologies utilisées
 
-HTML 5<br>
-CSS 3<br>
-Javascript
+<ul>
+    <li>HTML 5</li>
+    <li>CSS 3</li>
+    <li>Javascript</li>
+</ul>
+
+# Compétences évaluées
+
+<ul>
+    <li>Gérer les événements utilisateurs avec JavaScript</li>
+    <li>Manipuler les éléments du DOM avec JavaScript</li>
+    <li>Récupérer les données utilisateurs dans le JavaScript via des formulaires</li>
+    <li>Communiquer via une API</li>
+</ul>
 
 # Dépôt distant
 
