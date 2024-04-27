@@ -15,7 +15,7 @@ async function initData() {
     const req = await fetch("http://localhost:5678/api/works");
     data = await req.json();
 
-    
+
 
     //console.log(data)
     initGallery(data);
@@ -24,7 +24,7 @@ async function initData() {
     selectCategory(data)
 
     galleryPhotoDisplay(data);
-    
+
   } catch (error) {
     console.error(error);
   }
@@ -35,32 +35,32 @@ initData()
 
 
 // galerie fonctionnelle Javascript
-function initGallery(data) {  
-  
-    for (const objet of data) {
-      const figure = document.createElement("figure");
-      galleryElement.appendChild(figure);
-      figure.classList.add("figure")
-      figure.id = objet.id
+function initGallery(data) {
 
-      const image = new Image();
-      image.src = objet.imageUrl;
-      image.alt = objet.title;
-      figure.appendChild(image);
+  for (const objet of data) {
+    const figure = document.createElement("figure");
+    galleryElement.appendChild(figure);
+    figure.classList.add("figure")
+    figure.id = objet.id
 
-      const figcaption = document.createElement("figcaption");
-      figcaption.textContent = objet.title;
-      figure.appendChild(figcaption);
+    const image = new Image();
+    image.src = objet.imageUrl;
+    image.alt = objet.title;
+    figure.appendChild(image);
 
-      
-    } 
+    const figcaption = document.createElement("figcaption");
+    figcaption.textContent = objet.title;
+    figure.appendChild(figcaption);
+
+
+  }
 }
 
 
 // filtrer = masquer les figures selon la catégorie
 function filtrer(filtre = "Tout") {
   const allFigure = document.querySelectorAll(".figure");
-  
+
   for (const [index, figure] of allFigure.entries()) {
     //récupération des noms de catégories de chaque objets de data
     const category = data[index].category.name;
@@ -85,14 +85,14 @@ function setCategory(data) {
   //récupération des tableaux d'objets en objet javascript
   uniqueCategories = tableauCategories.map((s) => JSON.parse(s));
   //ajout de la catégorie "Tout" en première position
-  uniqueCategories.unshift({id: 0, name: "Tout"})
-  
-  
+  uniqueCategories.unshift({ id: 0, name: "Tout" })
+
+
 }
 
 function initFilterBtn(data) {
-    
-  
+
+
 
   //active filter
   for (const category of uniqueCategories) {
@@ -126,72 +126,72 @@ function initFilterBtn(data) {
 
 
 //function logout() {
-  // Supprime le token d'authentification du Session Storage
-  //sessionStorage.removeItem("authToken");
-  // Actualise la page
-  //location.reload();
+// Supprime le token d'authentification du Session Storage
+//sessionStorage.removeItem("authToken");
+// Actualise la page
+//location.reload();
 //}
 
 // page d'édition
 function editMode() {
   // Vérifier si l'utilisateur est connecté
 
-const body = document.querySelector("body")
+  const body = document.querySelector("body")
 
-if (token) {
-  // L'utilisateur est connecté, version edit de la page
-  
-  const loginBtn = document.querySelector(".login-btn");              
-  loginBtn.textContent = "logout"; 
-  //loginBtn.removeAttribute("href", "login.html")
-  //loginBtn.setAttribute("onclick", logout())
-  
-  
-  // mode edition bar
-  const modeEditionBar = document.createElement("div");
-  modeEditionBar.classList.add("mode-edition-bar");
-  body.prepend(modeEditionBar)
+  if (token) {
+    // L'utilisateur est connecté, version edit de la page
 
-  const whiteEditIcon = document.createElement("img")
-  whiteEditIcon.src = "assets/icons/pen-to-square-regular.svg"
-  whiteEditIcon.alt = "icone édition"
-  modeEditionBar.appendChild(whiteEditIcon)
+    const loginBtn = document.querySelector(".login-btn");
+    loginBtn.textContent = "logout";
+    //loginBtn.removeAttribute("href", "login.html")
+    //loginBtn.setAttribute("onclick", logout())
 
-  const modeEditionBarText = document.createElement("p")
-  modeEditionBarText.innerHTML = "Mode édition"
-  modeEditionBar.appendChild(modeEditionBarText)
 
-  // bouton d'édition 
+    // mode edition bar
+    const modeEditionBar = document.createElement("div");
+    modeEditionBar.classList.add("mode-edition-bar");
+    body.prepend(modeEditionBar)
 
-  const portfolioSection = document.getElementById("portfolio")
+    const whiteEditIcon = document.createElement("img")
+    whiteEditIcon.src = "assets/icons/pen-to-square-regular.svg"
+    whiteEditIcon.alt = "icone édition"
+    modeEditionBar.appendChild(whiteEditIcon)
 
-  const mesProjetsTitle = document.createElement("div")
-  mesProjetsTitle.classList.add("mes-projets-title")
-  portfolioSection.prepend(mesProjetsTitle)
+    const modeEditionBarText = document.createElement("p")
+    modeEditionBarText.innerHTML = "Mode édition"
+    modeEditionBar.appendChild(modeEditionBarText)
 
-  const mesProjetsh2 = document.querySelector("#portfolio h2")
-  mesProjetsTitle.appendChild(mesProjetsh2)
+    // bouton d'édition 
 
-  const openModalBtn = document.createElement("a")
-  openModalBtn.href = "#modal"
-  openModalBtn.classList.add("js-modal")
-  mesProjetsTitle.appendChild(openModalBtn)
-  
+    const portfolioSection = document.getElementById("portfolio")
 
-  const blackEditIcon = document.createElement("img")
-  blackEditIcon.src = "assets/icons/pen-to-square-regular (1).svg"
-  blackEditIcon.alt = "icone du bouton d'édition"
-  openModalBtn.prepend(blackEditIcon)
+    const mesProjetsTitle = document.createElement("div")
+    mesProjetsTitle.classList.add("mes-projets-title")
+    portfolioSection.prepend(mesProjetsTitle)
 
-  const openModalBtnText = document.createElement("p")
-  openModalBtnText.innerHTML= "modifier"
-  openModalBtn.appendChild(openModalBtnText)
+    const mesProjetsh2 = document.querySelector("#portfolio h2")
+    mesProjetsTitle.appendChild(mesProjetsh2)
 
-  //suppression section filtre
+    const openModalBtn = document.createElement("a")
+    openModalBtn.href = "#modal"
+    openModalBtn.classList.add("js-modal")
+    mesProjetsTitle.appendChild(openModalBtn)
 
-  filterElement.style.display = "none"
 
-  } 
+    const blackEditIcon = document.createElement("img")
+    blackEditIcon.src = "assets/icons/pen-to-square-regular (1).svg"
+    blackEditIcon.alt = "icone du bouton d'édition"
+    openModalBtn.prepend(blackEditIcon)
+
+    const openModalBtnText = document.createElement("p")
+    openModalBtnText.innerHTML = "modifier"
+    openModalBtn.appendChild(openModalBtnText)
+
+    //suppression section filtre
+
+    filterElement.style.display = "none"
+
+  }
 }
 
 editMode()
@@ -199,25 +199,25 @@ editMode()
 
 ///////////////////////////////// afficher et fermer la modale
 
-const openModal = function(e) {
+const openModal = function (e) {
   e.preventDefault()
   const modal = document.querySelector(".modal")
   modal.style.display = "flex"
 
-  
+
   //fermer la modale en cliquant sur la croix
   modal.querySelector(".close-modal-btn").addEventListener("click", closeModal)
   //fermer la modale en cliquant dans le vide (à suivre en dessous)
   modal.addEventListener("click", closeModal)
   //stopper la propagation de closeModal jusqu'à la fenêtre modale modal-wrapper
   modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
-  
+
 }
 
-const closeModal = function(e) {
-  if(modal === null) return
+const closeModal = function (e) {
+  if (modal === null) return
   e.preventDefault()
-  
+
   modal.style.display = "none"
   //enlever les addEventListener
   modal.removeEventListener("click", closeModal)
@@ -230,7 +230,7 @@ const closeModal = function(e) {
 }
 
 // fonction consistant à stopper une propagation
-const stopPropagation = function(e) {
+const stopPropagation = function (e) {
   e.stopPropagation()
 }
 
@@ -246,7 +246,7 @@ const secondModal = document.querySelector(".modal-add-photo")
 const backArrow = document.querySelector(".back-modal-btn")
 
 function ajouterUnePhoto() {
- 
+
   //passer à la seconde vue 
   firstModal.style.display = "none"
   secondModal.style.display = "flex"
@@ -265,17 +265,17 @@ function returnToModalGallery() {
 const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
 
 function galleryPhotoDisplay(data) {
- 
-  
-  
+
+
+
   for (let i = 0; i < data.length; i++) {
-    
-    
+
+
     let divImage = document.createElement("div")
     divImage.classList.add("modal-gallery-div")
     divImage.id = data[i].id
     galleryPhotoDisplaySection.appendChild(divImage)
-    
+
 
     const imagesToDelete = document.createElement("img")
     imagesToDelete.src = data[i].imageUrl
@@ -297,16 +297,16 @@ function galleryPhotoDisplay(data) {
     deleteImagesBtn.addEventListener("click", () => {
       divImage.remove()
       let figures = document.querySelectorAll(".figure")
-      figures.forEach((figure)=> {
-        if(data[i].id == figure.id)
+      figures.forEach((figure) => {
+        if (data[i].id == figure.id)
           figure.remove()
       })
-      
-      
+
+
     })
 
   }
-  
+
 }
 
 
@@ -317,20 +317,20 @@ function galleryPhotoDisplay(data) {
 
 function selectCategory() {
   const selectBar = document.querySelector(".category-img")
- 
-  
-  for(const category of uniqueCategories) {
+
+
+  for (const category of uniqueCategories) {
     if (category.name !== "Tout") {
       const categoryOption = document.createElement("option")
       categoryOption.innerHTML = category.name
       categoryOption.id = category.id
       selectBar.appendChild(categoryOption)
-      
+
     }
-    
-    
+
+
   }
- 
+
 }
 
 
@@ -341,7 +341,7 @@ function selectCategory() {
 
 const fileInput = document.getElementById('file-input');
 
-fileInput.addEventListener('change', function() {
+fileInput.addEventListener('change', function () {
   const beforePreview = document.querySelector(".preview-section")
   const afterPreview = document.querySelector(".preview-section-after")
 
@@ -354,7 +354,7 @@ fileInput.addEventListener('change', function() {
   previewImage.classList.add("preview-image")
   afterPreview.appendChild(previewImage)
 
-  
+
 });
 
 // Si tous les champs du formulaire sont remplis, le bouton valider du formulaire sera vert et en cursor pointer
@@ -387,20 +387,20 @@ function deleteWorkData(id) {
       accept: "*/*",
       authorization: `Bearer ${token}`,
     }
-    
+
   })
     .then(response => {
-      if (response.status === 200 || response.status === 204 ) {
+      if (response.ok) {
         alert("Fichier supprimé !")
       } else {
         console.log(response)
         alert(`Erreur ${response.status} lors de la tentative de suppression du travail.<br />`);
-        
+
       }
     })
     .catch(error => {
       alert("Une erreur s'est produite lors de la tentative de suppression du travail.");
-    }); 
+    });
 }
 
 
@@ -413,13 +413,13 @@ function deleteWorkData(id) {
 function formDataValue() {
 
   //récupérer les éléments du formulaire
-  
+
   let newImage = document.getElementById('file-input').files[0]
-  let newTitle = document.getElementById("titre-img").value 
+  let newTitle = document.getElementById("titre-img").value
   let select = document.querySelector(".category-img")
   let newCategoryName = select.options[select.selectedIndex].innerHTML
   let newCategoryId = select.options[select.selectedIndex].id
-  
+
   // les stocker dans formData
 
   let formData = new FormData();
@@ -427,15 +427,15 @@ function formDataValue() {
   formData.append("image", newImage)
   formData.append("category", newCategoryId)
 
-  
- return {
-  formData
-};
+
+  return {
+    formData
+  };
 }
 
 //ajouter la nouvelle figure dans la galerie puis suppression au moment de l'actualisation
 function addWorkGallery(newData) {
-  
+
   const figure = document.createElement("figure");
   galleryElement.appendChild(figure);
   figure.classList.add("figure")
@@ -455,30 +455,30 @@ function addWorkGallery(newData) {
 
 //ajouter la nouvelle figure dans la modale puis suppression au moment de l'actualisation
 function addWorkModal(newData) {
-  
+
 
   let divImage = document.createElement("div")
-    divImage.classList.add("modal-gallery-div")
-    divImage.classList.add("new-work-modal")
-    divImage.id = newData.id
-    galleryPhotoDisplaySection.appendChild(divImage)
-    
+  divImage.classList.add("modal-gallery-div")
+  divImage.classList.add("new-work-modal")
+  divImage.id = newData.id
+  galleryPhotoDisplaySection.appendChild(divImage)
 
-    const imagesToDelete = document.createElement("img")
-    imagesToDelete.src = newData.imageUrl
-    imagesToDelete.alt = newData.title
-    imagesToDelete.classList.add("image-to-delete")
-    divImage.appendChild(imagesToDelete)
 
-    const deleteImagesBtn = document.createElement("button")
-    deleteImagesBtn.classList.add("delete-image-btn")
-    divImage.appendChild(deleteImagesBtn)
-    deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${newData.id})`)
+  const imagesToDelete = document.createElement("img")
+  imagesToDelete.src = newData.imageUrl
+  imagesToDelete.alt = newData.title
+  imagesToDelete.classList.add("image-to-delete")
+  divImage.appendChild(imagesToDelete)
 
-    const deleteImagesIcon = document.createElement("img")
-    deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
-    deleteImagesIcon.alt = `delete id="${newData.id}" photo`
-    deleteImagesBtn.appendChild(deleteImagesIcon)
+  const deleteImagesBtn = document.createElement("button")
+  deleteImagesBtn.classList.add("delete-image-btn")
+  divImage.appendChild(deleteImagesBtn)
+  deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${newData.id})`)
+
+  const deleteImagesIcon = document.createElement("img")
+  deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
+  deleteImagesIcon.alt = `delete id="${newData.id}" photo`
+  deleteImagesBtn.appendChild(deleteImagesIcon)
 }
 
 const form = document.forms.namedItem("fileinfo");
@@ -486,24 +486,24 @@ form.addEventListener(
   "submit",
   (event) => {
     event.preventDefault();
-    
-    let {formData} = formDataValue()
-   
+
+    let { formData } = formDataValue()
+
     fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
         accept: "application/json",
         authorization: `Bearer ${token}`,
-        
+
       },
       body: formData
     })
       .then(response => {
-        if (response.status === 201) {
+        if (response.ok) {
           alert("Fichier téléversé !")
           // Récupérer la réponse du serveur au format JSON
-          return response.json(); 
-          
+          return response.json();
+
         } else {
           console.log(response)
           alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
@@ -519,13 +519,13 @@ form.addEventListener(
           figureToRemove.remove()
           modalDivToRemove.remove()
         });
-        
+
       })
       .catch(error => {
         alert("Une erreur s'est produite lors de la tentative de téléversement du fichier.");
       });
-    
-    
+
+
   },
   false,
 );
