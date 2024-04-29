@@ -53,7 +53,6 @@ function filtrer(filtre = "Tout") {
       figure.classList.add("hidden")
     }
   }
-
 }
 
 function setCategory(data) {
@@ -61,7 +60,7 @@ function setCategory(data) {
   //récupération de chaque categories de data en texte json
   data.forEach((objet) => {
     listOfCategories.add(JSON.stringify(objet.category))
-  });
+  })
   //ajout de chaque catégorie dans un tableau
   const tableauCategories = [...listOfCategories]
   //récupération des tableaux d'objets en objet javascript
@@ -286,6 +285,7 @@ function formSubmitBtnActive() {
   if (fileInput.files[0] != undefined && newTitle != "" && select.options[select.selectedIndex].innerText != "") {
     formSubmitBtn.style.backgroundColor = "#1D6154"
     formSubmitBtn.style.cursor = "pointer"
+    formSubmitBtn.setAttribute("type", "submit")
   }
 }
 
@@ -303,7 +303,6 @@ function deleteWorkData(id) {
   })
     .then(response => {
       if (response.ok) {
-        alert("Fichier supprimé !")
       } else {
         console.log(response)
         alert(`Erreur ${response.status} lors de la tentative de suppression du travail.<br />`)
@@ -397,7 +396,6 @@ form.addEventListener(
     })
       .then(response => {
         if (response.ok) {
-          alert("Fichier téléversé !")
           // Récupérer la réponse du serveur au format JSON
           return response.json();
         } else {
@@ -408,13 +406,14 @@ form.addEventListener(
       .then(newData => {
         addWorkModal(newData)
         addWorkGallery(newData)
-        // Supprimer la figure lors du rechargement de la page
+        // Supprimer la figure temporaire lors du rechargement de la page
         window.addEventListener('load', () => {
           const figureToRemove = document.querySelector(".new-work")
           const modalDivToRemove = document.querySelector(".new-work-modal")
           figureToRemove.remove()
           modalDivToRemove.remove()
         })
+        closeModal(event)
       })
       .catch(error => {
         alert("Une erreur s'est produite lors de la tentative de téléversement du fichier.")

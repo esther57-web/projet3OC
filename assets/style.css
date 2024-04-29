@@ -238,7 +238,7 @@ label {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#contact input[type="submit"], .modal-gallery-photo input[type="submit"], .log-form input[type="submit"]{
+#contact input[type="submit"], .submit-add-photo-btn, .submit-gallery-photo-btn, .log-form input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -359,8 +359,8 @@ footer li {
 
 
 
-.modal-wrapper input[type="submit"] {
-	margin: 1rem 0 0 0;
+.submit-gallery-photo-btn, .submit-add-photo-btn {
+	margin: 1rem 0 0 0 !important;
 	height: 36px;
 }
 
@@ -497,7 +497,6 @@ label[for="file-input"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
-	margin : 2em auto ;
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
