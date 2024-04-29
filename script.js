@@ -418,7 +418,6 @@ form.addEventListener(
       .catch(error => {
         alert("Une erreur s'est produite lors de la tentative de téléversement du fichier.")
       })
-  },
-  false,
+  }
 )
 
