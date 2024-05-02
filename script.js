@@ -41,7 +41,7 @@ function initGallery(data) {
 
 // filtrer = masquer les figures selon la catégorie
 function filtrer(filtre = "Tout") {
-  const allFigure = document.querySelectorAll(".figure");
+  const allFigure = document.querySelectorAll(".figure")
 
   for (const [index, figure] of allFigure.entries()) {
     //récupération des noms de catégories de chaque objets de data
@@ -56,7 +56,7 @@ function filtrer(filtre = "Tout") {
 }
 
 function setCategory(data) {
-  let listOfCategories = new Set();
+  let listOfCategories = new Set()
   //récupération de chaque categories de data en texte json
   data.forEach((objet) => {
     listOfCategories.add(JSON.stringify(objet.category))
@@ -258,7 +258,6 @@ fileInput.addEventListener('change', function () {
   previewImage.alt = fileInput.files[0].name
   previewImage.classList.add("preview-image")
   afterPreview.appendChild(previewImage)
-
 })
 
 // Si tous les champs du formulaire sont remplis, le bouton valider du formulaire sera vert et en cursor pointer
@@ -281,7 +280,7 @@ function formSubmitBtnActive() {
 
 //////////////////////////////////////// Supprimer un travail /////////////////////////////////////////////
 
-//suppression immédiate du travail dans le DOM ligne 231
+//suppression immédiate du travail dans le DOM ligne 220
 //suppression du travail dans l'API
 function deleteWorkData(id) {
   fetch(`http://localhost:5678/api/works/${id}`, {
@@ -293,6 +292,7 @@ function deleteWorkData(id) {
   })
     .then(response => {
       if (response.ok) {
+        console.log("fichier supprimé !")
       } else {
         console.log(response)
         alert(`Erreur ${response.status} lors de la tentative de suppression du travail.<br />`)
