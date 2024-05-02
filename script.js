@@ -7,11 +7,11 @@ let token = sessionStorage.getItem("authToken")
 
 async function initData() {
   try {
-    const req = await fetch("http://localhost:5678/api/works");
+    const req = await fetch("http://localhost:5678/api/works")
     data = await req.json()
     initGallery(data)
     setCategory(data)
-    initFilterBtn(data)
+    initFilterBtn()
     selectCategory(data)
     galleryPhotoDisplay(data)
   } catch (error) {
@@ -69,7 +69,7 @@ function setCategory(data) {
   uniqueCategories.unshift({ id: 0, name: "Tout" })
 }
 
-function initFilterBtn(data) {
+function initFilterBtn() {
   for (const category of uniqueCategories) {
     const filterBtn = document.createElement("button")
     filterBtn.textContent = category.name
@@ -80,8 +80,8 @@ function initFilterBtn(data) {
     }
 
     filterBtn.addEventListener("click", () => {
-      const allFilterBtn = document.querySelectorAll(".filter-btn");
-      filtrer(category.name);
+      const allFilterBtn = document.querySelectorAll(".filter-btn")
+      filtrer(category.name)
       for (const currentFilterBtn of allFilterBtn) {
         if (currentFilterBtn === filterBtn) {
           currentFilterBtn.classList.add("active-filter-btn")
@@ -89,7 +89,7 @@ function initFilterBtn(data) {
           currentFilterBtn.classList.remove("active-filter-btn")
         }
       }
-    });
+    })
     filterElement.appendChild(filterBtn)
   }
 }
@@ -157,16 +157,8 @@ const openModal = function (e) {
 }
 
 const closeModal = function (e) {
-  if (modal === null) return
   e.preventDefault()
-
   modal.style.display = "none"
-  //enlever les addEventListener
-  modal.removeEventListener("click", closeModal)
-  modal.querySelector(".close-modal-btn").removeEventListener("click", closeModal)
-  modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
-  modall = null
-
   //retourner à la première vue automatiquement quand je ferme la modale
   returnToModalGallery()
 }
@@ -175,9 +167,7 @@ const stopPropagation = function (e) {
   e.stopPropagation()
 }
 
-document.querySelectorAll(".js-modal").forEach(a => {
-  a.addEventListener("click", openModal)
-})
+document.querySelector(".js-modal").addEventListener("click", openModal)
 
 //////////////////////////////// chemin première et seconde vue de la modale
 
@@ -321,7 +311,6 @@ function formDataValue() {
   let newImage = document.getElementById('file-input').files[0]
   let newTitle = document.getElementById("titre-img").value
   let select = document.querySelector(".category-img")
-  let newCategoryName = select.options[select.selectedIndex].innerHTML
   let newCategoryId = select.options[select.selectedIndex].id
   // les stocker dans formData
   let formData = new FormData()
@@ -336,8 +325,8 @@ function formDataValue() {
 //ajouter la nouvelle figure dans la galerie puis suppression au moment de l'actualisation
 function addWorkGallery(newData) {
 
-  const figure = document.createElement("figure");
-  galleryElement.appendChild(figure);
+  const figure = document.createElement("figure")
+  galleryElement.appendChild(figure)
   figure.classList.add("figure")
   figure.classList.add("new-work")
   figure.id = newData.id
@@ -397,7 +386,7 @@ form.addEventListener(
       .then(response => {
         if (response.ok) {
           // Récupérer la réponse du serveur au format JSON
-          return response.json();
+          return response.json()
         } else {
           console.log(response)
           alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);

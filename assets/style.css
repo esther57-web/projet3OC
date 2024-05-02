@@ -255,6 +255,8 @@ label {
 	cursor: pointer;
 }
 
+/** footer **/
+
 footer {
 	background-color: white;
 	height: 60px;
@@ -329,8 +331,6 @@ footer li {
 	display: none;
 }
 
-
-
 .modal-wrapper {
 	background-color: white;
 	width: 630px;
@@ -351,13 +351,10 @@ footer li {
 	cursor: pointer;
 }
 
-
 .modal-wrapper section {
 	margin: 1rem;
 
 }
-
-
 
 .submit-gallery-photo-btn, .submit-add-photo-btn {
 	margin: 1rem 0 0 0 !important;
@@ -501,7 +498,6 @@ label[for="file-input"] {
 	text-align: center;
 	border-radius: 60px ;
 }
-
 
 .preview-image {
 	width: 130px;
