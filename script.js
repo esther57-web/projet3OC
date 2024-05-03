@@ -57,7 +57,7 @@ function filtrer(filtre = "Tout") {
 
 function setCategory(data) {
   let listOfCategories = new Set()
-  //récupération de chaque categories de data en texte json
+  //récupération de chaque categories de data en chaine de caractères
   data.forEach((objet) => {
     listOfCategories.add(JSON.stringify(objet.category))
   })
@@ -372,7 +372,7 @@ const form = document.forms.namedItem("fileinfo");
 form.addEventListener(
   "submit",
   (event) => {
-    event.preventDefault();
+    event.preventDefault()
     let { formData } = formDataValue()
 
     fetch("http://localhost:5678/api/works", {
