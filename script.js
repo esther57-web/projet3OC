@@ -174,21 +174,24 @@ document.querySelector(".js-modal").addEventListener("click", openModal)
 const firstModal = document.querySelector(".modal-gallery-photo")
 const secondModal = document.querySelector(".modal-add-photo")
 const backArrow = document.querySelector(".back-modal-btn")
+const toSecondViewBtn = document.querySelector(".submit-gallery-photo-btn")
+const toFirstViewBtn = document.querySelector(".back-modal-btn")
 
-function ajouterUnePhoto() {
+function toSecondView() {
 
   //passer à la seconde vue 
   firstModal.style.display = "none"
   secondModal.style.display = "flex"
   backArrow.style.visibility = "visible"
 }
-
+toSecondViewBtn.addEventListener("click", toSecondView)
 //retourner à la première vue
 function returnToModalGallery() {
   firstModal.style.display = "flex"
   secondModal.style.display = "none"
   backArrow.style.visibility = "hidden"
 }
+toFirstViewBtn.addEventListener("click", returnToModalGallery)
 
 //afficher les images dans la modale
 
