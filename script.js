@@ -1,27 +1,27 @@
 const galleryElement = document.querySelector(".gallery")
 const filterElement = document.querySelector(".filter")
 
-let data
+let work
 let uniqueCategories
 let token = sessionStorage.getItem("authToken")
 
 async function initData() {
   try {
     const req = await fetch("http://localhost:5678/api/works")
-    data = await req.json()
-    initGallery(data)
-    setCategory(data)
+    work = await req.json()
+    initGallery(work)
+    setCategory(work)
     initFilterBtn()
-    selectCategory(data)
-    galleryPhotoDisplay(data)
+    selectCategory(work)
+    galleryPhotoDisplay(work)
   } catch (error) {
     console.error(error)
   }
 }
 initData()
 
-function initGallery(data) {
-  for (const objet of data) {
+function initGallery(work) {
+  for (const objet of work) {
     const figure = document.createElement("figure")
     galleryElement.appendChild(figure)
     figure.classList.add("figure")
@@ -45,7 +45,7 @@ function filtrer(filtre = "Tout") {
 
   for (const [index, figure] of allFigure.entries()) {
     //récupération des noms de catégories de chaque objets de data
-    const category = data[index].category.name
+    const category = work[index].category.name
     figure.setAttribute('data-category', category)
     if (category === filtre || filtre === "Tout") {
       figure.classList.remove("hidden")
@@ -55,10 +55,10 @@ function filtrer(filtre = "Tout") {
   }
 }
 
-function setCategory(data) {
+function setCategory(work) {
   let listOfCategories = new Set()
   //récupération de chaque categories de data en chaine de caractères
-  data.forEach((objet) => {
+  work.forEach((objet) => {
     listOfCategories.add(JSON.stringify(objet.category))
   })
   //ajout de chaque catégorie dans un tableau
@@ -197,27 +197,27 @@ toFirstViewBtn.addEventListener("click", returnToModalGallery)
 
 const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
 
-function galleryPhotoDisplay(data) {
-  for (let i = 0; i < data.length; i++) {
+function galleryPhotoDisplay(work) {
+  for (let i = 0; i < work.length; i++) {
     let divImage = document.createElement("div")
     divImage.classList.add("modal-gallery-div")
-    divImage.id = data[i].id
+    divImage.id = work[i].id
     galleryPhotoDisplaySection.appendChild(divImage)
 
     const imagesToDelete = document.createElement("img")
-    imagesToDelete.src = data[i].imageUrl
-    imagesToDelete.alt = data[i].title
+    imagesToDelete.src = work[i].imageUrl
+    imagesToDelete.alt = work[i].title
     imagesToDelete.classList.add("image-to-delete")
     divImage.appendChild(imagesToDelete)
 
     const deleteImagesBtn = document.createElement("button")
     deleteImagesBtn.classList.add("delete-image-btn")
     divImage.appendChild(deleteImagesBtn)
-    deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${data[i].id})`)
+    deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${work[i].id})`)
 
     const deleteImagesIcon = document.createElement("img")
     deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
-    deleteImagesIcon.alt = `delete id="${data[i].id}" photo`
+    deleteImagesIcon.alt = `delete id="${work[i].id}" photo`
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
     //supprimer le travail dans le dom sans recharger la page
@@ -225,7 +225,7 @@ function galleryPhotoDisplay(data) {
       divImage.remove()
       let figures = document.querySelectorAll(".figure")
       figures.forEach((figure) => {
-        if (data[i].id == figure.id)
+        if (work[i].id == figure.id)
           figure.remove()
       })
     })
@@ -326,48 +326,48 @@ function formDataValue() {
 }
 
 //ajouter la nouvelle figure dans la galerie puis suppression au moment de l'actualisation
-function addWorkGallery(newData) {
+function addWorkGallery(newTemporaryWork) {
 
   const figure = document.createElement("figure")
   galleryElement.appendChild(figure)
   figure.classList.add("figure")
   figure.classList.add("new-work")
-  figure.id = newData.id
+  figure.id = newTemporaryWork.id
 
   const image = new Image()
-  image.src = newData.imageUrl
-  image.alt = newData.title
+  image.src = newTemporaryWork.imageUrl
+  image.alt = newTemporaryWork.title
   figure.appendChild(image)
 
   const figcaption = document.createElement("figcaption")
-  figcaption.textContent = newData.title
+  figcaption.textContent = newTemporaryWork.title
   figure.appendChild(figcaption)
 
 }
 
 //ajouter la nouvelle figure dans la modale puis suppression au moment de l'actualisation
-function addWorkModal(newData) {
+function addWorkModal(newTemporaryWork) {
   
   let divImage = document.createElement("div")
   divImage.classList.add("modal-gallery-div")
   divImage.classList.add("new-work-modal")
-  divImage.id = newData.id
+  divImage.id = newTemporaryWork.id
   galleryPhotoDisplaySection.appendChild(divImage)
 
   const imagesToDelete = document.createElement("img")
-  imagesToDelete.src = newData.imageUrl
-  imagesToDelete.alt = newData.title
+  imagesToDelete.src = newTemporaryWork.imageUrl
+  imagesToDelete.alt = newTemporaryWork.title
   imagesToDelete.classList.add("image-to-delete")
   divImage.appendChild(imagesToDelete)
 
   const deleteImagesBtn = document.createElement("button")
   deleteImagesBtn.classList.add("delete-image-btn")
   divImage.appendChild(deleteImagesBtn)
-  deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${newData.id})`)
+  deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${newTemporaryWork.id})`)
 
   const deleteImagesIcon = document.createElement("img")
   deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
-  deleteImagesIcon.alt = `delete id="${newData.id}" photo`
+  deleteImagesIcon.alt = `delete id="${newTemporaryWork.id}" photo`
   deleteImagesBtn.appendChild(deleteImagesIcon)
 }
 
@@ -395,9 +395,9 @@ form.addEventListener(
           alert(`Erreur ${response.status} lors de la tentative de téléversement du fichier.<br />`);
         }
       })
-      .then(newData => {
-        addWorkModal(newData)
-        addWorkGallery(newData)
+      .then(newTemporaryWork => {
+        addWorkModal(newTemporaryWork)
+        addWorkGallery(newTemporaryWork)
         // Supprimer la figure temporaire lors du rechargement de la page
         window.addEventListener('load', () => {
           const figureToRemove = document.querySelector(".new-work")
