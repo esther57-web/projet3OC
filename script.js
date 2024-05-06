@@ -62,9 +62,9 @@ function setCategory(work) {
     listOfCategories.add(JSON.stringify(objet.category))
   })
   //ajout de chaque catégorie dans un tableau
-  const tableauCategories = [...listOfCategories]
+  const categoriesTab = [...listOfCategories]
   //récupération des tableaux d'objets en objet javascript
-  uniqueCategories = tableauCategories.map((s) => JSON.parse(s))
+  uniqueCategories = categoriesTab.map((s) => JSON.parse(s))
   //ajout de la catégorie "Tout" en première position
   uniqueCategories.unshift({ id: 0, name: "Tout" })
 }
@@ -115,17 +115,17 @@ function editMode() {
 
     const portfolioSection = document.getElementById("portfolio")
 
-    const mesProjetsTitle = document.createElement("div")
-    mesProjetsTitle.classList.add("mes-projets-title")
-    portfolioSection.prepend(mesProjetsTitle)
+    const workTitle = document.createElement("div")
+    workTitle.classList.add("mes-projets-title")
+    portfolioSection.prepend(workTitle)
 
     const mesProjetsh2 = document.querySelector("#portfolio h2")
-    mesProjetsTitle.appendChild(mesProjetsh2)
+    workTitle.appendChild(mesProjetsh2)
 
     const openModalBtn = document.createElement("a")
     openModalBtn.href = "#modal"
     openModalBtn.classList.add("js-modal")
-    mesProjetsTitle.appendChild(openModalBtn)
+    workTitle.appendChild(openModalBtn)
 
     const blackEditIcon = document.createElement("img")
     blackEditIcon.src = "assets/icons/pen-to-square-regular (1).svg"
