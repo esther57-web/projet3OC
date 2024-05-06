@@ -213,7 +213,7 @@ function galleryPhotoDisplay(work) {
     const deleteImagesBtn = document.createElement("button")
     deleteImagesBtn.classList.add("delete-image-btn")
     divImage.appendChild(deleteImagesBtn)
-    deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${work[i].id})`)
+    //deleteImagesBtn.setAttribute("onclick", `deleteWorkData(${work[i].id})`)
 
     const deleteImagesIcon = document.createElement("img")
     deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
@@ -221,13 +221,22 @@ function galleryPhotoDisplay(work) {
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
     //supprimer le travail dans le dom sans recharger la page
-    deleteImagesBtn.addEventListener("click", () => {
-      divImage.remove()
-      let figures = document.querySelectorAll(".figure")
-      figures.forEach((figure) => {
-        if (work[i].id == figure.id)
-          figure.remove()
-      })
+    deleteImagesBtn.addEventListener("click", async () => {
+      try {
+        // Appel de la fonction deleteWorkData
+        await deleteWorkData(work[i].id)
+        // Code à exécuter si deleteWorkData a réussi
+        divImage.remove()
+        let figures = document.querySelectorAll(".figure");
+        figures.forEach((figure) => {
+          if (work[i].id == figure.id) {
+            figure.remove()
+          }
+        })
+      } catch (error) {
+        // Code à exécuter si deleteWorkData n'a pas pu fonctionner directement
+        console.log("La fonction deleteWorkData n'a pas pu fonctionner directement.");
+      }
     })
   }
 }
