@@ -97,5 +97,3 @@ function initFilterBtn() {
     filterElement.appendChild(filterBtn)
   }
 }
-
-
