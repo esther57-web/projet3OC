@@ -110,7 +110,7 @@ const selectCategory = (uniqueCategories) => {
     const selectBar = document.querySelector(".category-img")
   
     for (const category of uniqueCategories) {
-      if (category.name !== "Tout") {
+      if (category.name !== "Tous") {
         const categoryOption = document.createElement("option")
         categoryOption.innerHTML = category.name
         categoryOption.id = category.id

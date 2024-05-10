@@ -5,16 +5,16 @@ import { galleryElement } from "./guest.js"
 
 const galleryPhotoDisplaySection = document.querySelector(".gallery-photo-section");
 
-function galleryPhotoDisplay(work) {
-  for (let i = 0; i < work.length; i++) {
+function galleryPhotoDisplay(works) {
+  for (let i = 0; i < works.length; i++) {
     let divImage = document.createElement("div")
     divImage.classList.add("modal-gallery-div")
-    divImage.id = work[i].id
+    divImage.id = works[i].id
     galleryPhotoDisplaySection.appendChild(divImage)
 
     const imagesToDelete = document.createElement("img")
-    imagesToDelete.src = work[i].imageUrl
-    imagesToDelete.alt = work[i].title
+    imagesToDelete.src = works[i].imageUrl
+    imagesToDelete.alt = works[i].title
     imagesToDelete.classList.add("image-to-delete")
     divImage.appendChild(imagesToDelete)
 
@@ -24,19 +24,19 @@ function galleryPhotoDisplay(work) {
 
     const deleteImagesIcon = document.createElement("img")
     deleteImagesIcon.src = "assets/icons/trash-can-solid.svg"
-    deleteImagesIcon.alt = `delete id="${work[i].id}" photo`
+    deleteImagesIcon.alt = `delete id="${works[i].id}" photo`
     deleteImagesBtn.appendChild(deleteImagesIcon)
 
     //supprimer le travail dans le dom sans recharger la page
     deleteImagesBtn.addEventListener("click", async () => {
       try {
         // Appel de la fonction deleteWorkData
-        await deleteWorkData(work[i].id)
+        await deleteWorkData(works[i].id)
         // Code à exécuter si deleteWorkData a réussi
         divImage.remove()
         let figures = document.querySelectorAll(".figure")
         figures.forEach((figure) => {
-          if (work[i].id == figure.id) {
+          if (works[i].id == figure.id) {
             figure.remove()
           }
         })

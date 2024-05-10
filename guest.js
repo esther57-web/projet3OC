@@ -4,28 +4,29 @@ const filterElement = document.querySelector(".filter")
 import { selectCategory } from './editionPage.js'
 import { galleryPhotoDisplay } from './modal.js'
 
-let work
+let works
 let uniqueCategories
+const defaultCategory = "Tous"
 let token = sessionStorage.getItem("authToken")
 export { token }
 
 async function initData() {
   try {
     const req = await fetch("http://localhost:5678/api/works")
-    work = await req.json()
-    initGallery(work)
-    setCategory(work)
+    works = await req.json()
+    initGallery(works)
+    setCategory(works)
     initFilterBtn()
     selectCategory(uniqueCategories)
-    galleryPhotoDisplay(work)
+    galleryPhotoDisplay(works)
   } catch (error) {
     console.error(error)
   }
 }
 initData()
 
-function initGallery(work) {
-  for (const objet of work) {
+function initGallery(works) {
+  for (const objet of works) {
     const figure = document.createElement("figure")
     galleryElement.appendChild(figure)
     figure.classList.add("figure")
@@ -44,14 +45,14 @@ function initGallery(work) {
 
 
 // filtrer = masquer les figures selon la catégorie
-function filtrer(filtre = "Tout") {
+function filterByCategory(filtre = defaultCategory) {
   const allFigure = document.querySelectorAll(".figure")
 
   for (const [index, figure] of allFigure.entries()) {
     //récupération des noms de catégories de chaque objets de data
-    const category = work[index].category.name
+    const category = works[index].category.name
     figure.setAttribute('data-category', category)
-    if (category === filtre || filtre === "Tout") {
+    if (category === filtre || filtre === defaultCategory) {
       figure.classList.remove("hidden")
     } else {
       figure.classList.add("hidden")
@@ -59,18 +60,18 @@ function filtrer(filtre = "Tout") {
   }
 }
 
-function setCategory(work) {
-  let listOfCategories = new Set()
+function setCategory(works) {
+  let listOfCategory = new Set()
   //récupération de chaque categories de data en chaine de caractères
-  work.forEach((objet) => {
-    listOfCategories.add(JSON.stringify(objet.category))
+  works.forEach((objet) => {
+    listOfCategory.add(JSON.stringify(objet.category))
   })
   //ajout de chaque catégorie dans un tableau
-  const categoriesTab = [...listOfCategories]
+  const categoriesTab = [...listOfCategory]
   //récupération des tableaux d'objets en objet javascript
   uniqueCategories = categoriesTab.map((s) => JSON.parse(s))
   //ajout de la catégorie "Tout" en première position
-  uniqueCategories.unshift({ id: 0, name: "Tout" })
+  uniqueCategories.unshift({ id: 0, name: defaultCategory })
 }
 
 function initFilterBtn() {
@@ -79,13 +80,13 @@ function initFilterBtn() {
     filterBtn.textContent = category.name
     filterBtn.classList.add("filter-btn")
 
-    if (category.name === "Tout") {
+    if (category.name === defaultCategory) {
       filterBtn.classList.add("active-filter-btn")
     }
 
     filterBtn.addEventListener("click", () => {
       const allFilterBtn = document.querySelectorAll(".filter-btn")
-      filtrer(category.name)
+      filterByCategory(category.name)
       for (const currentFilterBtn of allFilterBtn) {
         if (currentFilterBtn === filterBtn) {
           currentFilterBtn.classList.add("active-filter-btn")
